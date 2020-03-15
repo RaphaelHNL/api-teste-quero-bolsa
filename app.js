@@ -1,21 +1,15 @@
 var http = require('http');
-var url = require('url');
+const port = process.env.PORT || 3000
 
 const bolsas = require('./db.json')
 
 
-function callback(request, response){
-    var parts = url.parse(request.url);
-    var path = parts.path;
-
-    response.writeHead(200, {"Content-Type": "application/json; charset=utf-8"});
-    if(path == '/bolsas'){
-        response.end(JSON.stringify(bolsas))
-    }else {
-        response.end("Not found: " + path);
-    }
-}
-
-var server = http.createServer(callback);
-server.listen(3000);
-console.log("Servidor iniciado em http://localhost:3000/");
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(bolsas));
+  });
+  
+  server.listen(port,() => {
+    console.log(`Server running at port `+port);
+  });
